@@ -16,23 +16,101 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: rgb(7, 7, 48);
+        background: #000000; /* black background */
         overflow: hidden;
         font-family: 'Arial', sans-serif;
       }
 
+      /* Fireworks canvas goes behind all decorations */
       #fireworks-canvas {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .decorations-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
         z-index: 1;
+      }
+
+      /* Balloon layer */
+      .balloon {
+        position: absolute;
+        width: 40px;
+        height: 50px;
+        background: radial-gradient(
+          circle at 70% 30%,
+          #fff 1px,
+          var(--balloon-color) 2px
+        );
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        /* CHANGED infinite → forwards so the animation will end, 
+           triggering 'animationend' to remove the balloon */
+        animation: float-balloon 15s ease-in-out forwards;
+        z-index: 2;
+        opacity: 0.7;
+      }
+
+      .balloon::before {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 20px;
+        height: 15px;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.6);
+        transform: rotate(-45deg);
+      }
+
+      /* Glowing stars */
+      .star {
+        position: fixed;
+        width: 4px;
+        height: 4px;
+        background: #fff;
+        border-radius: 50%;
+        animation: twinkle 2s ease-in-out infinite;
+        z-index: 3;
+        box-shadow:
+          0 0 10px #fff,
+          0 0 20px #fff,
+          0 0 30px #fff;
+      }
+
+      /* Ribbon layer - now with glow effect */
+      .ribbon {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border: 15px solid rgba(255, 215, 0, 0.3);
+        border-radius: 50%;
+        animation: rotate 20s linear infinite;
+        z-index: 1;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+      }
+
+      /* Confetti */
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background-color: gold;
+        z-index: 3;
+        animation: confetti-fall linear forwards;
       }
 
       .content-wrapper {
         position: relative;
-        z-index: 2;
+        z-index: 10;
         width: 100%;
         height: 100vh;
         display: flex;
@@ -40,100 +118,74 @@
         justify-content: center;
         align-items: center;
         pointer-events: none;
+        background: transparent;
       }
 
       .title {
         font-size: 6rem;
         font-weight: bold;
         text-align: center;
-        background: linear-gradient(45deg, #ff0, #ff6b6b, #4ecdc4, #45b7d1);
+        background: linear-gradient(45deg, #ffd700, #ff6b6b, #00ffff, #ff69b4);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
         animation: gradient 4s ease infinite;
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         margin-bottom: 1rem;
+        z-index: 15;
       }
 
       .subtitle {
         font-size: 1.5rem;
         color: #fff;
-        opacity: 0.8;
+        opacity: 0.9;
         text-align: center;
         animation: pulse 2s ease-in-out infinite;
+        z-index: 15;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
       }
 
-      /* New Year countdown style (if needed in future) */
-      .countdown {
-        font-size: 2rem;
-        color: #fff;
-        margin-top: 2rem;
-        display: flex;
-        gap: 2rem;
-      }
-
-      .countdown-item {
-        text-align: center;
-        animation: bounce 1.5s ease-in-out infinite;
-        animation-delay: calc(var(--delay) * 0.2s);
-      }
-
-      .countdown-number {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #ffd700;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-      }
-
-      /* Decorative corners */
+      /* Corner decorations with glow */
       .corner {
         position: fixed;
         width: 120px;
         height: 120px;
-        border: 5px solid gold;
-        opacity: 0.3;
-        z-index: 2;
+        border: 5px solid rgba(255, 215, 0, 0.3);
+        z-index: 5;
+        animation: corner-shine 3s ease-in-out infinite;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
       }
 
-      .corner::after {
-        content: '✨';
-        position: absolute;
-        font-size: 1.5rem;
-        color: gold;
-        animation: twinkle 1.5s ease-in-out infinite;
-      }
-
-      .corner-tl { 
-        top: 20px; 
-        left: 20px; 
-        border-right: none; 
+      .corner-tl {
+        top: 20px;
+        left: 20px;
+        border-right: none;
         border-bottom: none;
       }
-      .corner-tr { 
-        top: 20px; 
-        right: 20px; 
-        border-left: none; 
+      .corner-tr {
+        top: 20px;
+        right: 20px;
+        border-left: none;
         border-bottom: none;
       }
-      .corner-bl { 
-        bottom: 20px; 
-        left: 20px; 
-        border-right: none; 
+      .corner-bl {
+        bottom: 20px;
+        left: 20px;
+        border-right: none;
         border-top: none;
       }
-      .corner-br { 
-        bottom: 20px; 
-        right: 20px; 
-        border-left: none; 
+      .corner-br {
+        bottom: 20px;
+        right: 20px;
+        border-left: none;
         border-top: none;
       }
 
-      /* Side decorations */
       .side-decoration {
         position: fixed;
         width: 50px;
         height: 200px;
-        z-index: 2;
+        z-index: 5;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
@@ -154,40 +206,71 @@
 
       .decoration-item {
         font-size: 2rem;
-        color: gold;
-        opacity: 0.6;
+        opacity: 0.8;
         animation: float 3s ease-in-out infinite;
         animation-delay: calc(var(--delay) * 0.5s);
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
       }
 
-      /* Additional decorations: Balloons and Confetti */
-      .balloon {
-        position: fixed;
-        bottom: -100px; /* start off-screen at the bottom */
-        font-size: 2rem;
-        z-index: 2;
-        animation: balloon-float linear forwards;
+      /***************************
+       *    KEYFRAME ANIMATIONS  *
+       ***************************/
+
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
       }
 
-      @keyframes balloon-float {
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.9;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-10px) rotate(5deg); }
+      }
+
+      @keyframes twinkle {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.5); }
+      }
+
+      @keyframes float-balloon {
         0% {
-          transform: translateY(0);
+          transform: translateY(120vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.7;
+        }
+        90% {
+          opacity: 0.7;
         }
         100% {
-          transform: translateY(-120vh); /* move the balloon way up */
-          opacity: 0; /* fade it out as it goes */
+          transform: translateY(-20vh) rotate(360deg);
+          opacity: 0;
         }
       }
 
-      .confetti {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background-color: gold;
-        z-index: 2;
-        animation: confetti-fall linear forwards;
+      @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
 
+      @keyframes corner-shine {
+        0%, 100% { border-color: rgba(255, 215, 0, 0.3); }
+        50% { border-color: rgba(255, 215, 0, 0.5); }
+      }
+
+      /* Confetti fall */
       @keyframes confetti-fall {
         0% {
           transform: translateY(0) rotate(0deg);
@@ -198,52 +281,26 @@
         }
       }
 
-      .star {
-        position: fixed;
-        color: gold;
-        opacity: 0.6;
-        animation: twinkle 2s ease-in-out infinite;
-        z-index: 2;
-      }
-
-      /* Animations reused from original code */
-      @keyframes gradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 0.8; }
-        50% { opacity: 0.6; }
-      }
-      @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-      }
-      @keyframes float {
-        0%, 100% { transform: translateY(0) rotate(0deg); }
-        50% { transform: translateY(-10px) rotate(5deg); }
-      }
-      @keyframes twinkle {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 0.8; }
-      }
-
       @media (max-width: 768px) {
-        .countdown {
-          flex-direction: column;
-          gap: 1rem;
+        .title {
+          font-size: 3rem;
+        }
+        .side-decoration {
+          display: none;
         }
       }
     </style>
   </head>
   <body>
+    <!-- Fireworks canvas behind everything -->
     <canvas id="fireworks-canvas"></canvas>
-    
+
+    <!-- Container for automatically added stars, balloons, ribbons, confetti -->
+    <div class="decorations-container"></div>
+
+    <!-- Main content in front -->
     <div class="content-wrapper">
-      <h1 class="title">
-        HAPPY NEW YEAR 2025
-      </h1>
+      <h1 class="title">HAPPY NEW YEAR 2025</h1>
       <p class="subtitle">I hope all your dreams come true in this New Year!</p>
     </div>
 
@@ -255,116 +312,128 @@
 
     <!-- Side decorations -->
     <div class="side-decoration left">
-      <span class="decoration-item" style="--delay: 0">🎉</span>
+      <span class="decoration-item" style="--delay: 0">✨</span>
       <span class="decoration-item" style="--delay: 1">⭐</span>
-      <span class="decoration-item" style="--delay: 2">🎊</span>
+      <span class="decoration-item" style="--delay: 2">✨</span>
     </div>
 
     <div class="side-decoration right">
-      <span class="decoration-item" style="--delay: 2">🎊</span>
+      <span class="decoration-item" style="--delay: 2">✨</span>
       <span class="decoration-item" style="--delay: 1">⭐</span>
-      <span class="decoration-item" style="--delay: 0">🎉</span>
+      <span class="decoration-item" style="--delay: 0">✨</span>
     </div>
 
-    <!-- Random stars -->
-    <script>
-      function createStars() {
-        for (let i = 0; i < 20; i++) {
-          const star = document.createElement('div');
-          star.className = 'star';
-          star.textContent = '✨';
-          star.style.left = Math.random() * 100 + 'vw';
-          star.style.top = Math.random() * 100 + 'vh';
-          star.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
-          star.style.animationDelay = Math.random() * 2 + 's';
-          document.body.appendChild(star);
-        }
-      }
-      createStars();
-    </script>
-
-    <!-- Fireworks script -->
+    <!-- Script to handle fireworks (optional if you don't have fireworks.js) -->
     <script src="fireworks.js"></script>
 
-    <!-- Additional decorations: balloons and confetti -->
     <script>
-      // Create balloons that float up from bottom
+      /**************************************************
+       *          DECORATION CREATION FUNCTIONS         *
+       **************************************************/
+
+      /* 1) Create random twinkling stars */
+      function createStars() {
+        const decorationsContainer = document.querySelector('.decorations-container');
+        for (let i = 0; i < 30; i++) {
+          const star = document.createElement('div');
+          star.className = 'star';
+          star.style.left = Math.random() * 100 + 'vw';
+          star.style.top = Math.random() * 100 + 'vh';
+          star.style.animationDelay = Math.random() * 2 + 's';
+          decorationsContainer.appendChild(star);
+        }
+      }
+
+      /* 2) Create balloons floating from bottom to top */
       function createBalloons() {
-        const balloonEmojis = ['🎈','🎈','🎈','🎈','🎈']; // or mix with other emojis if you like
-        const balloonCount = 10; // number of balloons
+        const decorationsContainer = document.querySelector('.decorations-container');
+        const colors = ['#ff69b4', '#00ffff', '#ffd700', '#ff6b6b', '#7fffd4'];
+
+        const balloonCount = 4 + Math.floor(Math.random() * 2);
 
         for (let i = 0; i < balloonCount; i++) {
           const balloon = document.createElement('div');
           balloon.className = 'balloon';
-          balloon.textContent = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
+          balloon.style.setProperty('--balloon-color',
+            colors[Math.floor(Math.random() * colors.length)]
+          );
+          balloon.style.left = (Math.random() * 80 + 10) + 'vw';
+          balloon.style.animationDelay = Math.random() * 5 + 's';
+          decorationsContainer.appendChild(balloon);
 
-          // Random horizontal position
-          balloon.style.left = Math.random() * 100 + 'vw';
-          // Random duration between 6s and 12s
-          const duration = 6 + Math.random() * 6;
-          balloon.style.animationDuration = duration + 's';
-          // Small random delay so they start at different times
-          balloon.style.animationDelay = Math.random() * 3 + 's';
-          // Random size
-          balloon.style.fontSize = (1 + Math.random() * 2) + 'rem';
-
-          // Remove balloon after animation ends to avoid DOM clutter
+          // Remove balloon after its animation finishes
           balloon.addEventListener('animationend', () => {
             balloon.remove();
           });
-
-          document.body.appendChild(balloon);
         }
       }
 
-      // Create confetti that falls from the top
+      /* 3) Create glowing circular ribbons in corners (example positions) */
+      function createRibbons() {
+        const decorationsContainer = document.querySelector('.decorations-container');
+        const positions = [
+          { top: '10%', left: '10%' },
+          { bottom: '10%', right: '10%' }
+        ];
+        
+        positions.forEach(pos => {
+          const ribbon = document.createElement('div');
+          ribbon.className = 'ribbon';
+          Object.assign(ribbon.style, pos);
+          decorationsContainer.appendChild(ribbon);
+        });
+      }
+
+      /* 4) Create falling confetti */
       function createConfetti() {
-        const confettiCount = 30;
+        const decorationsContainer = document.querySelector('.decorations-container');
+        const confettiCount = 25; // adjust as you like
+        const colors = ['#ff6b6b', '#ffd700', '#4ecdc4', '#45b7d1', '#ff0'];
+
         for (let i = 0; i < confettiCount; i++) {
           const confetti = document.createElement('div');
           confetti.className = 'confetti';
 
-          // Random position at top (slightly above the viewport)
+          // Random position at top
           confetti.style.left = Math.random() * 100 + 'vw';
           confetti.style.top = '-20px';
 
-          // Random color for confetti
-          const colors = ['#ff6b6b', '#ffd700', '#4ecdc4', '#45b7d1', '#ff0'];
+          // Random color from array
           confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
 
-          // Random size and shape
+          // Random size
           const size = Math.random() * 6 + 5; // 5px ~ 11px
           confetti.style.width = size + 'px';
           confetti.style.height = size + 'px';
 
-          // Random duration between 3s and 6s
-          const duration = 3 + Math.random() * 3;
+          // Random duration (1s ~ 4s)
+          const duration = 1 + Math.random() * 3;
           confetti.style.animationDuration = duration + 's';
 
-          // Slightly random rotate speed
-          confetti.style.animationTimingFunction = 'linear';
+          decorationsContainer.appendChild(confetti);
 
-          // Remove confetti after animation
+          // Remove confetti after animation ends
           confetti.addEventListener('animationend', () => {
             confetti.remove();
           });
-
-          document.body.appendChild(confetti);
         }
       }
 
-      // Trigger the decorations after a short delay,
-      // or you can trigger them on a button click, etc.
-      setTimeout(() => {
-        createBalloons();
-        createConfetti();
-      }, 2000);
+      /**************************************************
+       *           INITIAL SETUP & REPEATING            *
+       **************************************************/
 
-      // Optionally keep spawning them at intervals
+      // Create some static/initial decorations right away
+      createStars();
+      // createBalloons();
+      createRibbons();
+      createConfetti();
+
+      // Optionally keep spawning new balloons/confetti every 10 seconds
       setInterval(() => {
-        createBalloons();
+        // createBalloons();
         createConfetti();
-      }, 10000); // spawn new balloons & confetti every 10s
+      }, 10000);
     </script>
   </body>
 </html>
