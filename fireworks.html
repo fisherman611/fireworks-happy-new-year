@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy New Year 2025</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgb(7, 7, 48);
+        overflow: hidden;
+        font-family: 'Arial', sans-serif;
+      }
+
+      #fireworks-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      .content-wrapper {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+      }
+
+      .title {
+        font-size: 6rem;
+        font-weight: bold;
+        text-align: center;
+        background: linear-gradient(45deg, #ff0, #ff6b6b, #4ecdc4, #45b7d1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradient 4s ease infinite;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        margin-bottom: 1rem;
+      }
+
+      .subtitle {
+        font-size: 1.5rem;
+        color: #fff;
+        opacity: 0.8;
+        text-align: center;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      /* New Year countdown style */
+      .countdown {
+        font-size: 2rem;
+        color: #fff;
+        margin-top: 2rem;
+        display: flex;
+        gap: 2rem;
+      }
+
+      .countdown-item {
+        text-align: center;
+        animation: bounce 1.5s ease-in-out infinite;
+        animation-delay: calc(var(--delay) * 0.2s);
+      }
+
+      .countdown-number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #ffd700;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      }
+
+      /* Decorative elements */
+      .corner {
+        position: fixed;
+        width: 120px;
+        height: 120px;
+        border: 5px solid gold;
+        opacity: 0.3;
+        z-index: 2;
+      }
+
+      .corner::after {
+        content: '✨';
+        position: absolute;
+        font-size: 1.5rem;
+        color: gold;
+        animation: twinkle 1.5s ease-in-out infinite;
+      }
+
+      .corner-tl { 
+        top: 20px; 
+        left: 20px; 
+        border-right: none; 
+        border-bottom: none;
+      }
+      .corner-tr { 
+        top: 20px; 
+        right: 20px; 
+        border-left: none; 
+        border-bottom: none;
+      }
+      .corner-bl { 
+        bottom: 20px; 
+        left: 20px; 
+        border-right: none; 
+        border-top: none;
+      }
+      .corner-br { 
+        bottom: 20px; 
+        right: 20px; 
+        border-left: none; 
+        border-top: none;
+      }
+
+      /* Side decorations */
+      .side-decoration {
+        position: fixed;
+        width: 50px;
+        height: 200px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .side-decoration.left {
+        left: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .side-decoration.right {
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .decoration-item {
+        font-size: 2rem;
+        color: gold;
+        opacity: 0.6;
+        animation: float 3s ease-in-out infinite;
+        animation-delay: calc(var(--delay) * 0.5s);
+      }
+
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 0.6; }
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-10px) rotate(5deg); }
+      }
+
+      @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.8; }
+      }
+
+      .star {
+        position: fixed;
+        color: gold;
+        opacity: 0.6;
+        animation: twinkle 2s ease-in-out infinite;
+        z-index: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="fireworks-canvas"></canvas>
+    
+    <div class="content-wrapper">
+      <h1 class="title">
+        HAPPY NEW YEAR 2025
+      </h1>
+      <p class="subtitle">I hope all your dreams come true in this New Year!</p>
+      <style>
+        @media (max-width: 768px) {
+          .countdown {
+        flex-direction: column;
+        gap: 1rem;
+          }
+        }
+      </style>
+    </div>
+
+    <!-- Corner decorations -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- Side decorations -->
+    <div class="side-decoration left">
+      <span class="decoration-item" style="--delay: 0">🎉</span>
+      <span class="decoration-item" style="--delay: 1">⭐</span>
+      <span class="decoration-item" style="--delay: 2">🎊</span>
+    </div>
+
+    <div class="side-decoration right">
+      <span class="decoration-item" style="--delay: 2">🎊</span>
+      <span class="decoration-item" style="--delay: 1">⭐</span>
+      <span class="decoration-item" style="--delay: 0">🎉</span>
+    </div>
+
+    <!-- Random stars -->
+    <script>
+      function createStars() {
+        for (let i = 0; i < 20; i++) {
+          const star = document.createElement('div');
+          star.className = 'star';
+          star.textContent = '✨';
+          star.style.left = Math.random() * 100 + 'vw';
+          star.style.top = Math.random() * 100 + 'vh';
+          star.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
+          star.style.animationDelay = Math.random() * 2 + 's';
+          document.body.appendChild(star);
+        }
+      }
+      createStars();
+    </script>
+
+    <script src="fireworks.js"></script>
+  </body>
+</html>
