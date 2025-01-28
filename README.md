@@ -18,11 +18,11 @@ This repository contains a project that creates a beautiful fireworks display us
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/fisherman611/Fireworks-Happy-New-Year.git
+    git clone https://github.com/fisherman611/fireworks-happy-new-year.git
     ```
 2. Navigate to the project directory:
     ```sh
-    cd Fireworks-Happy-New-Year
+    cd fireworks-happy-new-year
     ```
 3. Open the `fireworks.html` file in your web browser to see the fireworks display.
 
