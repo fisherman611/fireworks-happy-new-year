@@ -1,4 +1,4 @@
-# Fireworks - Happy New Year
+# Fireworks - Happy New Year 🎉✨🎊
 
 This repository contains a project that creates a beautiful fireworks display using HTML and JavaScript to celebrate the New Year.
 
@@ -12,6 +12,7 @@ This repository contains a project that creates a beautiful fireworks display us
 
 - HTML
 - JavaScript
+- CSS
 
 ## Usage
 
