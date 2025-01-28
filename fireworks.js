@@ -16,15 +16,12 @@ class Firework {
     }
     this.y = this.canvasHeight;
     
-    // New color palette
+    // Updated color palette
     const colors = [
-      'hsl(0, 100%, 50%)',    // Red
-      'hsl(30, 100%, 50%)',   // Orange
-      'hsl(60, 100%, 50%)',   // Yellow
-      'hsl(240, 100%, 50%)',  // Blue
+      'hsl(51, 100%, 50%)',   // Golden
       'hsl(0, 0%, 75%)',      // Silver
-      'hsl(270, 100%, 50%)',  // Purple
-      'hsl(120, 100%, 50%)'   // Green
+      'hsl(120, 100%, 50%)',  // Green
+      'hsl(0, 100%, 50%)'     // Red
     ];
     this.color = colors[Math.floor(Math.random() * colors.length)];
     this.complementaryColor = this.color;
